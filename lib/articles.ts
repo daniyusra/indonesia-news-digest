@@ -1,14 +1,9 @@
-import { ArticleBundle } from '@/types/article';
+import fs from 'fs/promises';
 import path from 'path';
+import { ArticleBundle } from '@/types/article';
 
 export async function getArticleBundles(): Promise<ArticleBundle[]> {
-  const url = path.join(process.cwd(), 'public', '/articles.json');
-
-  const res = await fetch(url, {
-    next: { revalidate: 60 }, // ISR for App Router
-  });
-
-  if (!res.ok) throw new Error('Failed to load article bundles');
-  const data: ArticleBundle[] = await res.json();
-  return data;
+  const filePath = path.join(process.cwd(), 'public', 'articles.json');
+  const fileContent = await fs.readFile(filePath, 'utf-8');
+  return JSON.parse(fileContent) as ArticleBundle[];
 }
