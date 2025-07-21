@@ -1,7 +1,10 @@
 import { ArticleBundle } from '@/types/article';
+import path from 'path';
 
 export async function getArticleBundles(): Promise<ArticleBundle[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/articles.json`, {
+  const url = path.join(process.cwd(), 'public', '/articles.json');
+
+  const res = await fetch(url, {
     next: { revalidate: 60 }, // ISR for App Router
   });
 
